@@ -73,12 +73,12 @@ jobs:
       id: package
       run: |
         cd /OpenWrt/openwrt
-        make download -j8 V=s
+        make download -j8
 
     - name: 完成固件
       run: |
         cd /OpenWrt/openwrt
-        make -j1 V=s
+        make -j1
 
     - name: 上传固件
       uses: actions/upload-artifact@v3
