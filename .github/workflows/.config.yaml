@@ -123,15 +123,13 @@ jobs:
 
     - name: 打包文件
       run: |
-        cd ${{ github.workspace }}/lede/
-        sudo zip -r config.zip .config
+        sudo zip -r config.zip /OpenWrt/openwrt/.config
         mkdir -p ${{ github.workspace }}/lede/file
         sudo chmod 777 ${{ github.workspace }}/lede/file
         sudo mv -f config.zip ${{ github.workspace }}/lede/file/
-        ls ${{ github.workspace }}/lede/file/
 
     - name: 上传config
       uses: actions/upload-artifact@v3
       with:
-        name: OpenWrt_.config
+        name: OpenWrt.config
         path: ${{ github.workspace }}/lede/file/*
