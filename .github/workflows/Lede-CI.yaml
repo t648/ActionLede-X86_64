@@ -48,6 +48,7 @@ jobs:
         ls
         git clone $REPO_URL -b $REPO_BRANCH openwrt
         ln -sf /OepWrt/openwrt $GITHUB_WORKSPACE/openwrt
+        cd openwrt
         ls
 
     - name: 覆写写入插件配置
