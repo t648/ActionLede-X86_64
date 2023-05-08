@@ -63,6 +63,10 @@ jobs:
         git clone $REPO_URL -b $REPO_BRANCH openwrt
         ln -sf /OepWrt/openwrt $GITHUB_WORKSPACE/openwrt
 
+    - name: 覆写写入插件配置
+      run: |
+        [ -e $FEEDS_CONF ] && cp -f $FEEDS_CONF /OpenWrt/openwrt/feeds.conf.default
+
     - name: 更新插件库
       run: | 
         cd /OpenWrt/openwrt && ./scripts/feeds update -a
@@ -70,10 +74,6 @@ jobs:
     - name: 安装插件库
       run: | 
         cd /OpenWrt/openwrt && ./scripts/feeds install -a
-
-    - name: 覆写写入插件配置
-      run: |
-        [ -e $FEEDS_CONF ] && cp -f $FEEDS_CONF /OpenWrt/openwrt/feeds.conf.default
 
     - name: 编译插件库
       id: package
