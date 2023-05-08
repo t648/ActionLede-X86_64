@@ -44,15 +44,16 @@ jobs:
     - name: 下载Lede源码
       working-directory: /OpenWrt
       run: |
-        df -hT $PWD
         cd /OpenWrt
+        ls
         git clone $REPO_URL -b $REPO_BRANCH openwrt
         ln -sf /OepWrt/openwrt $GITHUB_WORKSPACE/openwrt
+        ls
 
     - name: 覆写写入插件配置
       run: |
-        [ -e $FEEDS_CONF ] && mv -f $FEEDS_CONF /OpenWrt/openwrt/feeds.conf.default
-        [ -e $CONFIG_FILE ] && mv -f $CONFIG_FILE /OpenWrt/openwrt/.config
+        [ -e $FEEDS_CONF ] && cp -f $FEEDS_CONF /OpenWrt/openwrt/feeds.conf.default
+        [ -e $CONFIG_FILE ] && cp -f $CONFIG_FILE /OpenWrt/openwrt/.config
         cd /OpenWrt/openwrt
         sed -i 's/192.168.1.1/192.168.3.10/g' package/base-files/files/bin/config_generate
         sed -i 's/OpenWrt/Jayha/g' package/base-files/files/bin/config_generate
@@ -65,35 +66,22 @@ jobs:
       run: | 
         cd /OpenWrt/openwrt && ./scripts/feeds install -a
 
-    - name: SSH connection to Actions
-      uses: P3TERX/ssh2actions@main
-      if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
-      env:
-        TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-        TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+    - name: 编译插件库
+      id: package
+      run: |
+        cd /OpenWrt/openwrt
+        make defconfig
+        make download -j8
+        find dl -size -1024c -exec ls -l {} \;
+        find dl -size -1024c -exec rm -f {} \;
 
-    # - name: 编译插件库
-    #   id: package
-    #   run: |
-    #     cd /OpenWrt/openwrt
-    #     make defconfig
-    #     make download -j8
-    #     find dl -size -1024c -exec ls -l {} \;
-    #     find dl -size -1024c -exec rm -f {} \;
+    - name: 完成固件
+      run: |
+        cd /OpenWrt/openwrt
+        make -j1 V=s
 
-    # - name: 完成固件
-    #   run: |
-    #     cd /OpenWrt/openwrt
-    #     make -j1 V=s
-
-    # - name: 上传固件
-    #   uses: actions/upload-artifact@v3
-    #   with:
-    #     name: OpenWrt_firmware
-    #     path: /OpenWrt/openwrt/bin/targets/*/*
-    - name: 上传config
+    - name: 上传固件
       uses: actions/upload-artifact@v3
       with:
-        name: OpenWrt_.config
-        path: ${{ github.workspace }}/lede/file/*
-
+        name: OpenWrt_firmware
+        path: /OpenWrt/openwrt/bin/targets/*/*
