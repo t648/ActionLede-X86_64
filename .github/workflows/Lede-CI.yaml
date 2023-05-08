@@ -66,6 +66,7 @@ jobs:
     - name: 覆写写入插件配置
       run: |
         [ -e $FEEDS_CONF ] && cp -f $FEEDS_CONF /OpenWrt/openwrt/feeds.conf.default
+        [ -e $CONFIG_FILE ] && cp -f $CONFIG_FILE /OpenWrt/openwrt/.config
 
     - name: 更新插件库
       run: | 
@@ -84,14 +85,13 @@ jobs:
         find dl -size -1024c -exec ls -l {} \;
         find dl -size -1024c -exec rm -f {} \;
 
-    - name: 完成默认配置
-      run: |
-        cd /OpenWrt/openwrt
-        make -j1 V=s
+    # - name: 完成默认配置
+    #   run: |
+    #     cd /OpenWrt/openwrt
+    #     make -j1 V=s
 
     - name: 完成自定义固件
       run: |
-        [ -e $CONFIG_FILE ] && cp -f $CONFIG_FILE /OpenWrt/openwrt/.config
         cd /OpenWrt/openwrt
         make V=s -j$(nproc)
 
