@@ -82,13 +82,13 @@ jobs:
       run: | 
         cd /lede/openwrt && ./scripts/feeds install -a
 
-    - name: 编译插件库
-      id: package
-      run: |
-        cd /lede/openwrt
-        make download -j8
-        find dl -size -1024c -exec ls -l {} \;
-        find dl -size -1024c -exec rm -f {} \;
+    # - name: 编译插件库
+    #   id: package
+    #   run: |
+    #     cd /lede/openwrt
+    #     make download -j8
+    #     find dl -size -1024c -exec ls -l {} \;
+    #     find dl -size -1024c -exec rm -f {} \;
 
     # - name: 完成默认配置
     #   run: |
@@ -98,7 +98,7 @@ jobs:
     - name: 完成自定义固件
       run: |
         cd /lede/openwrt
-        make V=s -j1
+        make -j1 V=s
 
     - name: 上传固件
       uses: actions/upload-artifact@v3
