@@ -63,10 +63,17 @@ jobs:
         git clone $REPO_URL -b $REPO_BRANCH openwrt
         ln -sf /OepWrt/openwrt $GITHUB_WORKSPACE/openwrt
 
-    - name: 覆写写入插件配置
+    - name: 覆写插件配置
       run: |
         [ -e $FEEDS_CONF ] && cp -f $FEEDS_CONF /OpenWrt/openwrt/feeds.conf.default
+        cd /OpenWrt/openwrt
+        make defconfig
+        du -h /OpenWrt/openwrt/.config
+
+    - name: 覆写插件配置
+      run: |
         [ -e $CONFIG_FILE ] && cp -f $CONFIG_FILE /OpenWrt/openwrt/.config
+        du -h /OpenWrt/openwrt/.config
 
     - name: 更新插件库
       run: | 
@@ -80,7 +87,6 @@ jobs:
       id: package
       run: |
         cd /OpenWrt/openwrt
-        make defconfig
         make download -j8
         find dl -size -1024c -exec ls -l {} \;
         find dl -size -1024c -exec rm -f {} \;
