@@ -73,7 +73,6 @@ jobs:
     - name: 覆写插件配置
       run: |
         [ -e $CONFIG_FILE ] && cp -f $CONFIG_FILE /lede/openwrt/.config
-        du -h /ledeopenwrt/.config
 
     - name: 更新插件库
       run: | 
