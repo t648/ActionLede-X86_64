@@ -99,7 +99,7 @@ jobs:
     - name: 完成自定义固件
       run: |
         cd /OpenWrt/openwrt
-        make V=s -j$(nproc)
+        make V=s -j1
 
     - name: 上传固件
       uses: actions/upload-artifact@v3
