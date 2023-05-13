@@ -60,10 +60,6 @@ jobs:
         cd /lede/openwrt
         make defconfig
 
-    - name: 覆写
-      run: |
-        [ -e $CONFIG_FILE ] && cp -f $CONFIG_FILE /lede/openwrt/.config
-
     - name: 更新插件库
       run: | 
         cd /lede/openwrt && ./scripts/feeds update -a
@@ -71,6 +67,11 @@ jobs:
     - name: 安装插件库
       run: | 
         cd /lede/openwrt && ./scripts/feeds install -a
+        
+    - name: 覆写
+      run: |
+        [ -e $CONFIG_FILE ] && cp -f $CONFIG_FILE /lede/openwrt/.config
+
 
     - name: 编译插件库
       run: |
