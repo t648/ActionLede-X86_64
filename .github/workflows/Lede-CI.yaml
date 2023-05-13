@@ -54,7 +54,9 @@ jobs:
 
     - name: 覆写插件配置
       run: |
+        cat /lede/openwrt/feeds.conf.default
         [ -e $FEEDS_CONF ] && cp -f $FEEDS_CONF /lede/openwrt/feeds.conf.default
+        cat /lede/openwrt/feeds.conf.default
         cd /lede/openwrt
         make defconfig
 
