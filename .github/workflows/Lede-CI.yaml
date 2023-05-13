@@ -49,7 +49,7 @@ jobs:
       working-directory: /lede
       run: |
         df -hT $PWD
-        git clone https://github.com/coolsnowwolf/lede.git
+        git clone https://github.com/coolsnowwolf/lede.git openwrt
         ln -sf /lede/openwrt $GITHUB_WORKSPACE/openwrt
 
     - name: 覆写插件配置
