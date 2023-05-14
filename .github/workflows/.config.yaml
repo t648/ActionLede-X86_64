@@ -49,6 +49,12 @@ jobs:
         git clone https://github.com/coolsnowwolf/lede.git openwrt
         ln -sf /lede/openwrt $GITHUB_WORKSPACE/openwrt
 
+    - name: 覆写插件配置
+      run: |
+        [ -e $FEEDS_CONF ] && cp -f $FEEDS_CONF /lede/openwrt/feeds.conf.default
+        cd /lede/openwrt
+        make defconfig
+
     - name: 更新插件库
       run: | 
         cd /lede/openwrt && ./scripts/feeds update -a
@@ -56,10 +62,9 @@ jobs:
     - name: 安装插件库
       run: | 
         cd /lede/openwrt && ./scripts/feeds install -a
-
-    - name: 覆写写入插件配置
+        
+    - name: 覆写
       run: |
-        [ -e $FEEDS_CONF ] && cp -f $FEEDS_CONF /lede/openwrt/feeds.conf.default
         [ -e $CONFIG_FILE ] && cp -f $CONFIG_FILE /lede/openwrt/.config
         cd /lede/openwrt
         sed -i 's/192.168.1.1/192.168.3.10/g' package/base-files/files/bin/config_generate
