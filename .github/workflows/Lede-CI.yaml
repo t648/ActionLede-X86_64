@@ -71,7 +71,9 @@ jobs:
     - name: 覆写
       run: |
         [ -e $CONFIG_FILE ] && cp -f $CONFIG_FILE /lede/openwrt/.config
-
+        cd /lede/openwrt
+        sed -i 's/192.168.1.1/192.168.3.10/g' package/base-files/files/bin/config_generate
+        sed -i 's/OpenWrt/Jayha/g' package/base-files/files/bin/config_generate
 
     - name: 编译插件库
       run: |
