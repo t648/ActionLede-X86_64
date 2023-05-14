@@ -42,7 +42,7 @@ jobs:
         sudo mkdir -p /lede
         sudo chown $USER:$GROUPS /lede
 
-     - name: 下载Lede源码
+    - name: 下载Lede源码
       working-directory: /lede
       run: |
         df -hT $PWD
