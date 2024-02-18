@@ -88,7 +88,7 @@ jobs:
         make -j1 V=s
 
     - name: 上传固件
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: OpenWrt_firmware
         path: /lede/openwrt/bin/targets/*/*
